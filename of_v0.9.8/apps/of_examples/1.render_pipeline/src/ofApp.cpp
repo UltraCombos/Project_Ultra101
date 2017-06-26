@@ -19,14 +19,16 @@ void ofApp::draw(){
 		ofFill();
 	else
 		ofNoFill(); 
-	
+	//////////////////////////////////////////////////////////////////////////
+	//Top Left
 	glBegin(_primative_type);	
 	glVertex2f(150,  50);
 	glVertex2f(350,  50);
 	glVertex2f(350, 250);
 	glVertex2f(150, 250);
 	glEnd();
-	
+	//////////////////////////////////////////////////////////////////////////
+	//Top Right
 	ofSetColor(0, 255, 0);
 	glBegin(GL_TRIANGLE_FAN);
 	glVertex2f(450, 50);
@@ -34,7 +36,8 @@ void ofApp::draw(){
 	glVertex2f(650, 250);
 	glVertex2f(450, 250);
 	glEnd();
-	
+	//////////////////////////////////////////////////////////////////////////
+	//Bottom Left
 	ofSetColor(255, 255, 255);
 	_tex.bind();
 	glBegin(GL_TRIANGLE_FAN);
@@ -53,8 +56,8 @@ void ofApp::draw(){
 	
 	glEnd();
 	_tex.unbind();
-
-	
+	//////////////////////////////////////////////////////////////////////////
+	//Bottom Right
 	_tex.draw(450, 350, 200, 200);
 	
 }
