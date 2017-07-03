@@ -24,4 +24,5 @@ private:
 	ofMatrix4x4 _proj;
 	ofMatrix4x4 _view;
 	ofMatrix4x4 _model;
+	float _time_stamp=0;
 };

@@ -8,12 +8,22 @@ void ofApp::setup(){
 	ofBackground(0);
 
 	_proj.makePerspectiveMatrix(60, (float)ofGetWidth() / ofGetHeight(), 0.1, 100);
-	_view.makeLookAtViewMatrix({ 0,1,3 }, { 0,0,0 }, { 0,1,0 });
+	_view.makeLookAtViewMatrix({ 3,1,3 }, { 0,1,0 }, { 0,1,0 });
+	_model.makeTranslationMatrix(0, 1, 0);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	_model.makeRotationMatrix(ofGetElapsedTimef() * 100, 1, 1, 1);
+	float tmp = ofGetElapsedTimef();
+	float delta = tmp - _time_stamp;
+	_time_stamp = tmp;
+
+	ofMatrix4x4 rot;
+	rot.makeRotationMatrix(delta * 100, 1, 1, 1);
+	ofVec3f pos = _model.getTranslation();
+	_model.setTranslation(ofVec3f::zero());
+	_model = _model*rot;
+	_model.setTranslation(pos);
 }
 
 //--------------------------------------------------------------
