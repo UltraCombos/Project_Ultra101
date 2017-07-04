@@ -2,7 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
+	ofLoadImage(tex, "Koala.jpg");
+	load_shader();
 }
 
 //--------------------------------------------------------------
@@ -12,12 +13,19 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-
+	shader.begin();
+	tex.draw(0, 0);
+	shader.end();
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	switch (key)
+	{
+	case OF_KEY_F5:
+		load_shader();
+		break;
+	}
 }
 
 //--------------------------------------------------------------
@@ -69,3 +77,10 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
+
+void ofApp::load_shader()
+{
+	printf("shader is loaded!!!\n");
+	shader.load("shader.vert", "shader.frag");
+}
+
