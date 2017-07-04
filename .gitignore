@@ -1,0 +1,12 @@
+*.app/
+of_v0.9.8/docs/
+of_v0.9.8/export/
+of_v0.9.8/libs/
+of_v0.9.8/other/
+of_v0.9.8/scripts/
+of_v0.9.8/addons/
+of_v0.9.8/examples/
+of_v0.9.8/apps/myApps/
+of_v0.9.8/projectGenerator*/
+of_v0.9.8/*.*
+xcuserdata
