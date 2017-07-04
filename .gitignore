@@ -10,3 +10,7 @@ of_v0.9.8/apps/myApps/
 of_v0.9.8/projectGenerator*/
 of_v0.9.8/*.*
 xcuserdata
+bin/
+obj/
+*.db
+.vs/
