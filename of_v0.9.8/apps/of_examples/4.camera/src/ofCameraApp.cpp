@@ -1,20 +1,24 @@
-#include "ofApp.h"
+#include "ofCameraApp.h"
+ofFbo fbo;
 //--------------------------------------------------------------
-void ofApp::setup(){	
+void ofCameraApp::setup(){	
 	ofDisableArbTex();
 	ofLoadImage(_tex, "lena_color.gif");	
 	
 	ofSetFrameRate(60);
 	ofBackground(0);
 
-	_proj.makePerspectiveMatrix(60, (float)ofGetWidth() / ofGetHeight(), 0.1, 100);
-	_view.makeLookAtViewMatrix({ 3,1,3 }, { 0,1,0 }, { 0,1,0 });
+	camera.setupPerspective(false, 60, 0.1, 100);
+	camera.setPosition({ 3,1,3 });
+	camera.lookAt({ 0,1,0 }, { 0,1,0 });
+
 	_model.makeTranslationMatrix(0, 1, 0);
 	ofSetWindowTitle(string(typeid(*this).name()).substr(6));
+	fbo.allocate(800, 600, GL_RGBA8);
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofCameraApp::update(){
 	float tmp = ofGetElapsedTimef();
 	float delta = tmp - _time_stamp;
 	_time_stamp = tmp;
@@ -28,68 +32,66 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofCameraApp::draw(){
 	ofEnableDepthTest();
-
-	ofSetMatrixMode(OF_MATRIX_PROJECTION);
-	ofLoadMatrix(_proj);
-	ofScale(1, -1, 1);
-	ofSetMatrixMode(OF_MATRIX_MODELVIEW);
-	//////////////////////////////////////////////////////////////////////////
-	//camera space
-
-	//////////////////////////////////////////////////////////////////////////
-	ofLoadMatrix(_model*_view);
-	//////////////////////////////////////////////////////////////////////////
-	//model space
-	ofDrawAxis(1);
-	ofFill();
-	_tex.bind();
-	ofDrawBox(1);
-	_tex.unbind();
-	//////////////////////////////////////////////////////////////////////////
-	ofLoadMatrix(_view);
-	//////////////////////////////////////////////////////////////////////////
-	//world space
-	ofDrawAxis(10);
-	ofRotate(90, 0, 0, 1);
-	ofDrawGridPlane(1,10, true);
+	
+	camera.begin();
+	{
+		//////////////////////////////////////////////////////////////////////////
+		//world space
+		ofPushMatrix();
+		ofDrawAxis(10);
+		ofRotate(90, 0, 0, 1);
+		ofDrawGridPlane(1, 10, true);
+		ofPopMatrix();
+		//////////////////////////////////////////////////////////////////////////
+		ofMultMatrix(_model);
+		//////////////////////////////////////////////////////////////////////////
+		//model space
+		ofDrawAxis(1);
+		ofFill();
+		_tex.bind();
+		ofDrawBox(1);
+		_tex.unbind();
+	}
+	camera.end();
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	ofMatrix4x4 camMat = _view.getInverse();
+void ofCameraApp::keyPressed(int key){
+#if 1
 	float step = 0.1;
 	switch (key)
 	{
 	case 'a':case 'A':
-		camMat.preMultTranslate(ofVec3f(-step, 0, 0));
+		camera.move(-camera.getXAxis()*step);
 		break;
 	case 'd':case 'D':
-		camMat.preMultTranslate(ofVec3f(step, 0, 0));
+		camera.move(camera.getXAxis()*step);
 		break;
 	case 's':case 'S':
-		camMat.preMultTranslate(ofVec3f(0, 0,  step));
+		camera.move(camera.getZAxis()*step);
 		break;
 	case 'w':case 'W':
-		camMat.preMultTranslate(ofVec3f(0, 0, -step));
+		camera.move(-camera.getZAxis()*step);
 		break;	
 	}
-	_view = camMat.getInverse();
+#endif
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y){
+void ofCameraApp::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
+void ofCameraApp::mouseMoved(int x, int y){
+
+}
+
+//--------------------------------------------------------------
+void ofCameraApp::mouseDragged(int x, int y, int button){
+#if 1
 	ofVec2f premouse(ofGetPreviousMouseX(), ofGetPreviousMouseY());
 	ofVec2f mouse(x, y);
 	ofVec2f diff = mouse - premouse;
@@ -102,51 +104,53 @@ void ofApp::mouseDragged(int x, int y, int button){
 		ofVec2f axis = diff.normalize();
 		ofMatrix4x4 rot;
 		rot.makeRotationMatrix(theta, axis.y, axis.x, 0);
-		_view = _view*rot;
+		ofMatrix4x4 view = camera.getLocalTransformMatrix().getInverse();
+		view = view*rot;
+		camera.setTransformMatrix(view.getInverse());
 		break;
 	}
 	case OF_MOUSE_BUTTON_1:
 		ofMatrix4x4 t;
 		diff *= 0.01f;
-		t.makeTranslationMatrix(diff.x, -diff.y, 0);
-		_view = _view*t;
+		camera.move(-camera.getXAxis()*diff.x);
+		camera.move(camera.getYAxis()*diff.y);
 		break;
 	}
-
+#endif
 }
 
 //--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
+void ofCameraApp::mousePressed(int x, int y, int button){
 	
 	
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
+void ofCameraApp::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
+void ofCameraApp::mouseEntered(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
+void ofCameraApp::mouseExited(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
+void ofCameraApp::windowResized(int w, int h){
 }
 
 //--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
+void ofCameraApp::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofCameraApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
 

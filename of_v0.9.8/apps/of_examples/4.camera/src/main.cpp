@@ -1,14 +1,22 @@
 #include "ofMain.h"
 #include "ofApp.h"
-
+#include "ofCameraApp.h"
 //========================================================================
 int main( ){
+	ofGLFWWindowSettings settings;
+	settings.width = 800;
+	settings.height = 600;
+	settings.setGLVersion(4, 3);
+	settings.windowMode = OF_WINDOW;
+	
+	shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
+	shared_ptr<ofApp> mainApp(new ofApp);
 
-	ofSetupOpenGL(800,600, OF_WINDOW);			// <-------- setup the GL context
+	auto camWindow = ofCreateWindow(settings);
+	auto camApp = std::make_shared<ofCameraApp>();
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new ofApp());
+	ofRunApp(mainWindow, mainApp);
+	ofRunApp(camWindow, camApp);
+	ofRunMainLoop();
 
 }
