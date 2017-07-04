@@ -14,6 +14,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	shader.begin();
+	shader.setUniform1i("colorMode",colorMode);
 	tex.draw(0, 0);
 	shader.end();
 }
@@ -23,7 +24,15 @@ void ofApp::keyPressed(int key){
 	switch (key)
 	{
 	case OF_KEY_F5:
-		load_shader();
+		load_shader();	
+		break;
+	case '1':
+	case '2':
+	case '3':
+	case '4':
+	case '5':
+	case '6':
+		colorMode= key - '0';
 		break;
 	}
 }

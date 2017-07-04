@@ -23,5 +23,6 @@ private:
 	void load_shader();
 	ofShader shader;
 	ofTexture tex;
+	int colorMode=1;
 
 };
