@@ -28,9 +28,10 @@ void ofApp::draw(){
 
 		glGetFloatv(GL_MODELVIEW_MATRIX, cur.getPtr());
 
-		glTranslatef(1, 1, 0);	printCurrentModelMat();
-
-		glRotatef(30, 0, 0, 1);	printCurrentModelMat();
+		glTranslatef(1, 1, 0);	cout << "T2=";printCurrentModelMat();
+        ofMatrix4x4 mat;
+        
+		glRotatef(30, 0, 0, 1);	cout << "R1=";printCurrentModelMat();
 
 		//////////////////////////////////////////////////////////////////////////
 		//Draw a rectangle
@@ -122,6 +123,6 @@ void ofApp::printCurrentModelMat()
 {
 	pre = cur;
 	glGetFloatv(GL_MODELVIEW_MATRIX, cur.getPtr());
-	cout << "R1=" << cur * pre.getInverse() << endl << endl;
+	cout << cur * pre.getInverse() << endl << endl;
 }
 
