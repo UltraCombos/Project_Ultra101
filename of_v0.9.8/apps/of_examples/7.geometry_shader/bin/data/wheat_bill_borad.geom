@@ -16,7 +16,7 @@ uniform mat4 modelViewProjectionMatrix;
 uniform vec2 _wheat_root_of_tex;
 uniform vec2 _tex_size = vec2(0.1,1);
 uniform vec2 _tu;
-in vec4 ppp[1];
+
 in block1
 {
 	vec3 _color;
@@ -77,7 +77,8 @@ mat4 makeRotationMatrixByCrossedVector(vec3 cross_vec)
 mat4 makeTranslationMatrix(vec3 t)
 {
 	mat4 result=mat4(1.0);
-	result[3].xyz=t;
+	result[3]=vec4(t,1.0);
+	
 	return result;
 }
 mat4 getBillBoardMatrix()
@@ -93,7 +94,10 @@ mat4 getBillBoardMatrix()
 mat4 getRootTranslationMatrix()
 {
 	mat4 root_mat=mat4(1.0);
-	root_mat[3].xy= - vec2(_wheat_root_of_tex.x,_tex_size.y-_wheat_root_of_tex.y);
+	//root_mat[3]= - vec2(_wheat_root_of_tex.x,_tex_size.y-_wheat_root_of_tex.y);
+	root_mat[3]=  vec4(-_wheat_root_of_tex.x,_wheat_root_of_tex.y-_tex_size.y,0,1);
+	//root_mat[3].zw = vec2(0,1);
+	
 	return root_mat;
 }
 mat4 getSegmentRotateMatrix(vec3 crossed)
@@ -114,12 +118,12 @@ mat4 quick_inverse(mat4 m)
 void main(void)
 {	
 #if 0
-	gl_Position   = modelViewProjectionMatrix*ppp[0];
+	gl_Position   = modelViewProjectionMatrix*vec4(1,1,0,1);
 	EmitVertex();
 	EndPrimitive();	
 #else
 	_eye=quick_inverse(modelViewMatrix)[3].xyz;	
-	mat4 root_rotate    = mat4(1.0);//makeRotationMatrixByCrossedVector(_in[0]._angle);
+	mat4 root_rotate    = makeRotationMatrixByCrossedVector(_in[0]._angle);
 	mat4 bill_board_mat = getBillBoardMatrix();
 	mat4 root_tex_trans = getRootTranslationMatrix();
 	
@@ -131,6 +135,10 @@ void main(void)
 	mat4  seg_swing_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._swing);
 	mat4  seg_touch_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._touch);
 	mat4  pos_mat   = makeTranslationMatrix(gl_in[0].gl_Position.xyz);
+	//mat4  pos_mat   = makeTranslationMatrix(vec3(1,1,2));
+	//mat4 pos_mat = mat4(1.0);
+	//pos_mat[3] = vec4(1,1,2,1);
+	
 	//mat4  pos_mat   = makeTranslationMatrix(ppp[0].xyz);
 	
 	

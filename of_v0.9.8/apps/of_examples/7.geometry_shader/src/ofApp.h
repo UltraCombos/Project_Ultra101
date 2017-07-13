@@ -74,6 +74,7 @@ private:
 		printf("load shader.\n");
 		shader.load("wheat_bill_borad.vert", "wheat_bill_borad.frag", "wheat_bill_borad.geom");
 	}
+	void _swing_wheats();
 	ofShader shader;
 	ofBufferObject wheat_buf_obj;
 	ofVbo wheat_vbo;
