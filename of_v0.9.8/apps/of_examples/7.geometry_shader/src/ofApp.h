@@ -80,7 +80,7 @@ private:
 	ofVbo wheat_vbo;
 
 	ofCamera cam;
-	float range = 40.f;
+	float range = 200;
 	WheatData  _wheat_data;
 	ofTexture _wheatTex;
 	ofVec2f _wheat_root_of_tex;

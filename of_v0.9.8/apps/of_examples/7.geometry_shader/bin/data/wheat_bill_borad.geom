@@ -1,5 +1,7 @@
 #version 430 core
 #define _seg_num 6
+
+
 layout(points) in;
 //(_seg_num +1)*2
 layout(triangle_strip, max_vertices = 14) out;
@@ -132,15 +134,9 @@ void main(void)
 
 	float seg_height     = _tex_size.y / float(_seg_num);
 	float seg_tex_height = _tu.y       / float(_seg_num);
-	mat4  seg_swing_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._swing);
+	mat4  seg_swing_mat  = getSegmentRotateMatrix(_in[0]._swing);
 	mat4  seg_touch_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._touch);
 	mat4  pos_mat   = makeTranslationMatrix(gl_in[0].gl_Position.xyz);
-	//mat4  pos_mat   = makeTranslationMatrix(vec3(1,1,2));
-	//mat4 pos_mat = mat4(1.0);
-	//pos_mat[3] = vec4(1,1,2,1);
-	
-	//mat4  pos_mat   = makeTranslationMatrix(ppp[0].xyz);
-	
 	
 	mat4 wheat_mat      = bill_board_mat * root_tex_trans;
 	mat4 seg_grow_mat   = makeTranslationMatrix(vec3(0,seg_height,0));
