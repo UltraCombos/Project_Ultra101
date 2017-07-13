@@ -38,7 +38,7 @@ public:
 		visible = true;
 		seg_num = 5;
 		wheat_num = 12000;
-		wheat_scale = 0.001;
+		wheat_scale = 0.0005;
 		max_swing_angle = 30;
 		max_root_angle = 6;
 		swing_noise_scale = 0.0005;

@@ -3,11 +3,12 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofDisableArbTex();
+	_wheatTex.enableMipmap(); 
 	ofLoadImage(_wheatTex, "wheat_b&w.png");
-
+	
 	load_shader();
 
-	std::vector<Wheat> wheats(100000);
+	std::vector<Wheat> wheats(50*1000);
 
 	for (auto& wheat : wheats)
 	{
@@ -15,6 +16,7 @@ void ofApp::setup(){
 		wheat.pos.y = 0.f;
 		wheat.pos.z = range*(ofRandom(1.f) - 0.5f);
 		wheat.pos.w = 1.f;
+		
 	}
 	wheat_buf_obj.allocate(wheats, GL_DYNAMIC_DRAW);
 	wheat_vbo.setVertexBuffer(wheat_buf_obj, 3, sizeof(Wheat));
@@ -37,7 +39,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	ofEnableDepthTest();
+	ofDisableDepthTest();
+	ofEnableBlendMode(OF_BLENDMODE_SCREEN);
+
 	cam.begin();
 	{
 		glPointSize(10);

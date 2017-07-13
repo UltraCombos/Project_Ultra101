@@ -15,6 +15,6 @@ void main(void)
 {
 	float alpha=clamp((_dist_to_eye-_fade_in_range)/(_fade_out_range-_fade_in_range),0.0,1.0);
 	//frag_color = alpha* _color * texture(_wheat_tex, _texCoord*_tu);
-	//frag_color = texture(_wheat_tex, _texCoord*_tu);
-	frag_color = vec4(1.0);
+	frag_color = texture(_wheat_tex, _texCoord*_tu);
+	//frag_color = vec4(1.0);
 }

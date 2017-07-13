@@ -120,7 +120,7 @@ void main(void)
 #else
 	_eye=quick_inverse(modelViewMatrix)[3].xyz;	
 	mat4 root_rotate    = mat4(1.0);//makeRotationMatrixByCrossedVector(_in[0]._angle);
-	mat4 bill_board_mat = mat4(1.0);//getBillBoardMatrix();
+	mat4 bill_board_mat = getBillBoardMatrix();
 	mat4 root_tex_trans = getRootTranslationMatrix();
 	
 	vec4 touch_axis_theta=getAxisTheta(_in[0]._touch);
