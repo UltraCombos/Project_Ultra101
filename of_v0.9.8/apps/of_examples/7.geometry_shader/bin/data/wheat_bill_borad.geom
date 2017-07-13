@@ -1,8 +1,10 @@
-#version 400
+#version 430 core
 #define _seg_num 6
 layout(points) in;
 //(_seg_num +1)*2
 layout(triangle_strip, max_vertices = 14) out;
+//layout(line_strip, max_vertices = 14) out;
+//layout(points, max_vertices = 1) out;
 
 
 uniform mat4 viewMatrix;
@@ -12,9 +14,9 @@ uniform mat4 modelViewProjectionMatrix;
 
 //uniform int  _seg_num;
 uniform vec2 _wheat_root_of_tex;
-uniform vec2 _tex_size;
+uniform vec2 _tex_size = vec2(0.1,1);
 uniform vec2 _tu;
-
+in vec4 ppp[1];
 in block1
 {
 	vec3 _color;
@@ -111,9 +113,14 @@ mat4 quick_inverse(mat4 m)
 }
 void main(void)
 {	
+#if 0
+	gl_Position   = modelViewProjectionMatrix*ppp[0];
+	EmitVertex();
+	EndPrimitive();	
+#else
 	_eye=quick_inverse(modelViewMatrix)[3].xyz;	
-	mat4 root_rotate    = makeRotationMatrixByCrossedVector(_in[0]._angle);
-	mat4 bill_board_mat = getBillBoardMatrix();
+	mat4 root_rotate    = mat4(1.0);//makeRotationMatrixByCrossedVector(_in[0]._angle);
+	mat4 bill_board_mat = mat4(1.0);//getBillBoardMatrix();
 	mat4 root_tex_trans = getRootTranslationMatrix();
 	
 	vec4 touch_axis_theta=getAxisTheta(_in[0]._touch);
@@ -121,9 +128,10 @@ void main(void)
 
 	float seg_height     = _tex_size.y / float(_seg_num);
 	float seg_tex_height = _tu.y       / float(_seg_num);
-	mat4  seg_swing_mat  = getSegmentRotateMatrix(_in[0]._swing);
-	mat4  seg_touch_mat  = getSegmentRotateMatrix(_in[0]._touch);
+	mat4  seg_swing_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._swing);
+	mat4  seg_touch_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._touch);
 	mat4  pos_mat   = makeTranslationMatrix(gl_in[0].gl_Position.xyz);
+	//mat4  pos_mat   = makeTranslationMatrix(ppp[0].xyz);
 	
 	
 	mat4 wheat_mat      = bill_board_mat * root_tex_trans;
@@ -141,7 +149,7 @@ void main(void)
 		for(int j=0;j<2;j++)
 		{
 			vec4 new_vertex = pos_mat * wheat_mat * emit_vertex[j];
-			gl_Position   = modelViewMatrix*new_vertex;
+			gl_Position   = modelViewProjectionMatrix*new_vertex;
 			_color = vec4(_in[0]._color,1);
 			_texCoord     = emit_coord[j];
 			_dist_to_eye  = length(new_vertex.xyz-_eye);
@@ -151,4 +159,5 @@ void main(void)
 		grow_mat = seg_rotate_mat * seg_grow_mat;
 	}
 	EndPrimitive();	
+#endif
 }

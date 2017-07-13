@@ -1,4 +1,4 @@
-#version 400
+#version 430 core
 
 uniform sampler2D _wheat_tex;
 uniform vec2  _tu;
@@ -14,5 +14,7 @@ out vec4 frag_color;
 void main(void)
 {
 	float alpha=clamp((_dist_to_eye-_fade_in_range)/(_fade_out_range-_fade_in_range),0.0,1.0);
-	frag_color = alpha* _color * texture(_wheat_tex, _texCoord*_tu);
+	//frag_color = alpha* _color * texture(_wheat_tex, _texCoord*_tu);
+	//frag_color = texture(_wheat_tex, _texCoord*_tu);
+	frag_color = vec4(1.0);
 }
