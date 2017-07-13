@@ -1,18 +1,31 @@
-#version 120
-#extension GL_EXT_geometry_shader4 : enable
+#version 400
+#define _seg_num 6
+layout(points) in;
+//(_seg_num +1)*2
+layout(triangle_strip, max_vertices = 14) out;
 
-uniform int  _seg_num;
+
+uniform mat4 viewMatrix;
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+uniform mat4 modelViewProjectionMatrix;
+
+//uniform int  _seg_num;
 uniform vec2 _wheat_root_of_tex;
 uniform vec2 _tex_size;
 uniform vec2 _tu;
 
-varying in  vec3 _color[1];
-varying in  vec3 _angle[1];
-varying in  vec3 _swing[1];
-varying in  vec3 _touch[1];
+in block1
+{
+	vec3 _color;
+	vec3 _angle;
+	vec3 _swing;
+	vec3 _touch;
+} _in[1];
 
-varying out vec2 _texCoord;
-varying out float _dist_to_eye;
+out vec2 _texCoord;
+out float _dist_to_eye;
+out vec4 _color;
 
 vec2 coords[4] = vec2[4]( 
 	vec2(0.0  ,_tu.y),
@@ -67,7 +80,7 @@ mat4 makeTranslationMatrix(vec3 t)
 }
 mat4 getBillBoardMatrix()
 {	
-	vec3 v=_eye-gl_PositionIn[0].xyz;
+	vec3 v=_eye-gl_in[0].gl_Position.xyz;
 	v.y=0.0;
 	v=normalize(v);	
 	vec3 n=vec3(0.0, 0.0, 1.0);
@@ -98,19 +111,19 @@ mat4 quick_inverse(mat4 m)
 }
 void main(void)
 {	
-	_eye=quick_inverse(gl_ModelViewMatrix)[3].xyz;	
-	mat4 root_rotate    = makeRotationMatrixByCrossedVector(_angle[0]);
+	_eye=quick_inverse(modelViewMatrix)[3].xyz;	
+	mat4 root_rotate    = makeRotationMatrixByCrossedVector(_in[0]._angle);
 	mat4 bill_board_mat = getBillBoardMatrix();
 	mat4 root_tex_trans = getRootTranslationMatrix();
 	
-	vec4 touch_axis_theta=getAxisTheta(_touch[0]);
+	vec4 touch_axis_theta=getAxisTheta(_in[0]._touch);
 	touch_axis_theta.w /= float(_seg_num);
 
 	float seg_height     = _tex_size.y / float(_seg_num);
 	float seg_tex_height = _tu.y       / float(_seg_num);
-	mat4  seg_swing_mat  = getSegmentRotateMatrix(_swing[0]);
-	mat4  seg_touch_mat  = getSegmentRotateMatrix(_touch[0]);
-	mat4  pos_mat   = makeTranslationMatrix(gl_PositionIn[0].xyz);
+	mat4  seg_swing_mat  = getSegmentRotateMatrix(_in[0]._swing);
+	mat4  seg_touch_mat  = getSegmentRotateMatrix(_in[0]._touch);
+	mat4  pos_mat   = makeTranslationMatrix(gl_in[0].gl_Position.xyz);
 	
 	
 	mat4 wheat_mat      = bill_board_mat * root_tex_trans;
@@ -128,8 +141,8 @@ void main(void)
 		for(int j=0;j<2;j++)
 		{
 			vec4 new_vertex = pos_mat * wheat_mat * emit_vertex[j];
-			gl_Position   = gl_ModelViewProjectionMatrix*new_vertex;
-			gl_FrontColor = vec4(_color[0],1);
+			gl_Position   = modelViewMatrix*new_vertex;
+			_color = vec4(_in[0]._color,1);
 			_texCoord     = emit_coord[j];
 			_dist_to_eye  = length(new_vertex.xyz-_eye);
 			EmitVertex();
