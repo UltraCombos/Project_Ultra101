@@ -54,7 +54,7 @@ void main(void)
 	_out._angle = _wheats[gl_VertexID].angle.xyz*_max_root_angle;
 	_out._swing = cross(up,dir);
 	
-	_out._color = _wheats[gl_VertexID].color.xyz* 0.5+0.5*(clamp(length(_out._swing)/radians(_max_swing_angle),0.0,1.0));
+	_out._color = _wheats[gl_VertexID].color.xyz* 0.7+0.5*(clamp(length(_out._swing)/radians(_max_swing_angle),0.0,1.0));
 	
 	_out._touch = _wheats[gl_VertexID].touch_swing.xyz;	
 	gl_Position = _wheats[gl_VertexID].pos;

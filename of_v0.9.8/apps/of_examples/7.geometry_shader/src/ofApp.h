@@ -14,34 +14,6 @@ public:
 	float a;
 	float b;
 };
-#if 0
-class WheatData
-{
-public:	
-	ofParameter<int>   seg_num = 5;
-	ofParameter<int>   wheat_num = 100000;
-	ofParameter<float> wheat_scale = 0.0005;
-	ofParameter<float> max_swing_angle = 30;
-	ofParameter<float> max_root_angle = 6;
-
-	ofParameter<float> swing_pos_freq = 0.1;
-	ofParameter<float> swing_time_freq= 0.3;
-	ofParameter<float> fade_out_range = 50;
-	ofParameter<float> fade_in_range = 100;
-
-	/*
-	ofVec3f hsv_key1;
-	ofVec3f hsv_key2;
-	bool inner_hsv;
-	*/
-	WheatData()
-	{	
-//		hsv_key1 = uc::rgb_to_hsv(ofVec3f(0.844444, 0.565309, 0.286173));
-//		hsv_key2 = uc::rgb_to_hsv(ofVec3f(0.888889, 0.801317, 0.232099));
-//		inner_hsv = true;
-	}
-};
-#endif
 class ofApp : public ofBaseApp{
 public:
 	void setup();
@@ -65,14 +37,12 @@ private:
 		printf("load shader.\n");
 		shader.load("wheat_bill_borad.vert", "wheat_bill_borad.frag", "wheat_bill_borad.geom");
 	}
-	void _swing_wheats();
 	ofShader shader;
 	ofBufferObject wheat_buf_obj;
 	ofVbo wheat_vbo;
 
 	ofCamera cam;
 	float range = 200;
-	//WheatData  _wheat_data;
 
 	ofTexture _wheatTex;
 	ofVec2f _wheat_root_of_tex;
