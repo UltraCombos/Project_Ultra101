@@ -129,6 +129,13 @@ void ofApp::mouseDragged(int x, int y, int button){
 	ofMatrix4x4 rot;
 	rot.makeRotationMatrix(theta, axis);
 	ofMatrix4x4 view_mat = cam.getLocalTransformMatrix().getInverse();
+	view_mat = view_mat*rot;	
+	ofQuaternion qq;
+	ofVec3f wy = view_mat._mat[1];
+	wy.z = 0;
+	wy.normalize();
+	qq.makeRotate(wy, ofVec3f(0, 1, 0));
+	rot.makeRotationMatrix(qq);
 	view_mat = view_mat*rot;
 	cam.setTransformMatrix(view_mat.getInverse());
 }
