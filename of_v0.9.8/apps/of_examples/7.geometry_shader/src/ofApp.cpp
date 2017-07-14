@@ -48,8 +48,7 @@ void ofApp::setup(){
 
 	_wheat_root_of_tex.x = 66;
 	_wheat_root_of_tex.y = 986;
-
-	
+		
 	group.add(seg_num.set("Segment",seg_num,1,6));
 	group.add(wheat_num.set("Number", wheat_num, 1000, 1000000));
 	group.add(wheat_scale.set("Scale", wheat_scale, 0.0001, 0.001));

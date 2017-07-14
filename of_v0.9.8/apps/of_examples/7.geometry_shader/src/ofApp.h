@@ -51,7 +51,7 @@ private:
 	ofParameter<int>   seg_num = 5;
 	ofParameter<int>   wheat_num = 100000;
 	ofParameter<float> wheat_scale = 0.0005;
-	ofParameter<float> max_swing_angle = 30;
+	ofParameter<float> max_swing_angle = 60;
 	ofParameter<float> max_root_angle = 6;
 	ofParameter<float> swing_pos_freq = 0.1;
 	ofParameter<float> swing_time_freq = 0.3;
