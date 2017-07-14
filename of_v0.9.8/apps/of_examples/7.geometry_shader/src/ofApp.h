@@ -57,6 +57,7 @@ private:
 	ofParameter<float> swing_time_freq = 0.3;
 	ofParameter<float> fade_out_range = 50;
 	ofParameter<float> fade_in_range = 100;
+	ofParameter<bool>  wire_frame = false;
 	ofParameterGroup group;
 
 	ofxPanel panel;

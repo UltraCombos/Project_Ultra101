@@ -49,6 +49,7 @@ void ofApp::setup(){
 	_wheat_root_of_tex.x = 66;
 	_wheat_root_of_tex.y = 986;
 		
+	group.add(wire_frame.set("Wire Frame", wire_frame));
 	group.add(seg_num.set("Segment",seg_num,1,6));
 	group.add(wheat_num.set("Number", wheat_num, 1000, 1000000));
 	group.add(wheat_scale.set("Scale", wheat_scale, 0.0001, 0.001));
@@ -76,6 +77,7 @@ void ofApp::draw(){
 	cam.begin();
 	{
 		shader.begin();
+		
 		shader.setUniformTexture("_wheat_tex", _wheatTex, 0);
 		shader.setUniform1i("_seg_num", seg_num);
 		shader.setUniform2f("_wheat_root_of_tex", _wheat_root_of_tex.x*wheat_scale, _wheat_root_of_tex.y*wheat_scale);
@@ -88,6 +90,12 @@ void ofApp::draw(){
 		shader.setUniform1f("_fade_out_range", fade_out_range);
 		shader.setUniform1f("_fade_in_range", fade_in_range);
 		shader.setUniform1f("_elapsed_time", ofGetElapsedTimef());
+		shader.setUniform1f("_wire_frame", wire_frame);
+
+		if(wire_frame)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		wheat_buf_obj.bindBase(GL_SHADER_STORAGE_BUFFER, 0);
 		if(wheat_vbo.getNumVertices()>0)
