@@ -1,24 +1,15 @@
 #version 430 core
-#define _seg_num 6
-
-
 layout(points) in;
-//(_seg_num +1)*2
-layout(triangle_strip, max_vertices = 14) out;
-//layout(line_strip, max_vertices = 14) out;
-//layout(points, max_vertices = 1) out;
-
+layout(triangle_strip, max_vertices = 14) out;//(_seg_num +1)*2w
 
 uniform mat4 viewMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewProjectionMatrix;
 
-//uniform int  _seg_num;
+uniform int  _seg_num = 6;
 uniform vec2 _wheat_root_of_tex;
-uniform vec2 _tex_size = vec2(0.1,1);
-uniform vec2 _tu;
-
+uniform vec2 _tex_size;
 in block1
 {
 	vec3 _color;
@@ -32,10 +23,10 @@ out float _dist_to_eye;
 out vec4 _color;
 
 vec2 coords[4] = vec2[4]( 
-	vec2(0.0  ,_tu.y),
-	_tu.xy,
-	vec2(0.0  ,0.0  ),
-	vec2(_tu.x,0.0  )
+	vec2(0.0, 1.0),
+	vec2(1.0, 1.0),
+	vec2(0.0, 0.0),
+	vec2(1.0, 0.0)
 );
 vec3 vertice[4]= vec3[4]( 
 	vec3(0,0,0),
@@ -68,7 +59,10 @@ mat4 makeRotationMatrix(float theta,vec3 axis)
 vec4 getAxisTheta(vec3 cross_vec)
 {
 	float theta = asin(length(cross_vec));
-	return vec4(normalize(cross_vec),theta);
+	if(theta == 0)
+		return vec4(vec3(1,0,0),theta);
+	else		
+		return vec4(normalize(cross_vec),theta);
 }
 mat4 makeRotationMatrixByCrossedVector(vec3 cross_vec)
 {
@@ -96,10 +90,7 @@ mat4 getBillBoardMatrix()
 mat4 getRootTranslationMatrix()
 {
 	mat4 root_mat=mat4(1.0);
-	//root_mat[3]= - vec2(_wheat_root_of_tex.x,_tex_size.y-_wheat_root_of_tex.y);
-	root_mat[3]=  vec4(-_wheat_root_of_tex.x,_wheat_root_of_tex.y-_tex_size.y,0,1);
-	//root_mat[3].zw = vec2(0,1);
-	
+	root_mat[3]=  vec4(-_wheat_root_of_tex.x,_wheat_root_of_tex.y-_tex_size.y,0,1);	
 	return root_mat;
 }
 mat4 getSegmentRotateMatrix(vec3 crossed)
@@ -119,11 +110,6 @@ mat4 quick_inverse(mat4 m)
 }
 void main(void)
 {	
-#if 0
-	gl_Position   = modelViewProjectionMatrix*vec4(1,1,0,1);
-	EmitVertex();
-	EndPrimitive();	
-#else
 	_eye=quick_inverse(modelViewMatrix)[3].xyz;	
 	mat4 root_rotate    = makeRotationMatrixByCrossedVector(_in[0]._angle);
 	mat4 bill_board_mat = getBillBoardMatrix();
@@ -133,8 +119,9 @@ void main(void)
 	touch_axis_theta.w /= float(_seg_num);
 
 	float seg_height     = _tex_size.y / float(_seg_num);
-	float seg_tex_height = _tu.y       / float(_seg_num);
+	float seg_tex_height = 1.0         / float(_seg_num);
 	mat4  seg_swing_mat  = getSegmentRotateMatrix(_in[0]._swing);
+	//mat4  seg_swing_mat  = getSegmentRotateMatrix(_in[0]._angle);
 	mat4  seg_touch_mat  = mat4(1.0);//getSegmentRotateMatrix(_in[0]._touch);
 	mat4  pos_mat   = makeTranslationMatrix(gl_in[0].gl_Position.xyz);
 	
@@ -146,8 +133,8 @@ void main(void)
 	{		
 		float th = float(i)*seg_tex_height;
 		vec2 emit_coord[2]=vec2[2](
-			vec2(0.0  , 1.0-th),
-			vec2(_tu.x, 1.0-th)
+			vec2(0.0, 1.0-th),
+			vec2(1.0, 1.0-th)
 		);
 
 		for(int j=0;j<2;j++)
@@ -162,6 +149,5 @@ void main(void)
 		pos_mat  = pos_mat * grow_mat;
 		grow_mat = seg_rotate_mat * seg_grow_mat;
 	}
-	EndPrimitive();	
-#endif
+	EndPrimitive();
 }
