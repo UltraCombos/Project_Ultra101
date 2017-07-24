@@ -1,12 +1,12 @@
 #include <iostream>
 class my_int
 {
-public:
+public: // access level
 	my_int() {} //default constructor,it's created automatically if it doesn't exist.
 	my_int(const int & v) // another constructor
 		:val(v) //initializer list
 	{}
-private:
+private:// access level
 	int val = 0;
 //////////////////////////////////////////////////////////////////////////
 
