@@ -1,5 +1,6 @@
-#include "ofMain.h"
-#include "ofApp.h"
+#include <iostream>
+#include <vector>
+using namespace std;
 void print(float val)
 {
 	cout << val << "\t is " << typeid(val).name() << endl;
@@ -46,12 +47,12 @@ int main() {
 	int val = 1234567890;
 	print(val);
 	print2(val);
-	cout << "========================================================================" << endl;
+	cout << "===================================" << endl;
 
 	int a[] = { 5, 4, 3 };
 	cout << "my_sizeof(a) = " << my_sizeof(a)<<endl;
 	cout << "my_sizeof2(a) = " << my_sizeof2(a)<<endl;
-	cout << "========================================================================" << endl;
+	cout << "===================================" << endl;
 
 	my_vec2f v2f;
 	my_vec2i v2i;
@@ -60,7 +61,7 @@ int main() {
 	cout << "int_list = ";
 	print_list(int_list);
 
-	vector<float> float_list{ 1,2,3 };
+	vector<float> float_list{ 0.1f , 0.2f, 0.3f };
 	cout << "float_list = ";
 	print_list(float_list);
 	
