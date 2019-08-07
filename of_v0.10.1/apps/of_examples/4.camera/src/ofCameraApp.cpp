@@ -104,9 +104,13 @@ void ofCameraApp::mouseDragged(int x, int y, int button){
 		ofVec2f axis = diff.normalize();
 		ofMatrix4x4 rot;
 		rot.makeRotationMatrix(theta, axis.y, axis.x, 0);
-		ofMatrix4x4 view = camera.getLocalTransformMatrix().getInverse();
-		view = view*rot;
-		camera.setTransformMatrix(view.getInverse());
+		ofMatrix4x4 view = glm::inverse(camera.getLocalTransformMatrix());
+		view = view*rot;		
+		//camera.setTransformMatrix(view.getInverse());
+		auto camMat = view.getInverse();
+		camera.setPosition(camMat.getTranslation());
+		camera.setOrientation(camMat.getRotate());
+		camera.setScale(camMat.getScale());
 		break;
 	}
 	case OF_MOUSE_BUTTON_1:
