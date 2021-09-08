@@ -156,7 +156,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 	axis.normalize();
 	ofMatrix4x4 rot;
 	rot.makeRotationMatrix(theta, axis);
-	ofMatrix4x4 view_mat = cam.getLocalTransformMatrix().getInverse();
+	ofMatrix4x4 view_mat = glm::inverse(cam.getLocalTransformMatrix());
 	view_mat = view_mat*rot;	
 	ofQuaternion qq;
 	ofVec3f wy = view_mat._mat[1];
@@ -165,7 +165,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 	qq.makeRotate(wy, ofVec3f(0, 1, 0));
 	rot.makeRotationMatrix(qq);
 	view_mat = view_mat*rot;
-	cam.setTransformMatrix(view_mat.getInverse());
+	//cam.setTransformMatrix(view_mat.getInverse());
 }
 
 //--------------------------------------------------------------

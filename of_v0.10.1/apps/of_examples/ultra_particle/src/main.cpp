@@ -4,8 +4,7 @@
 //========================================================================
 int main( ){
     ofGLFWWindowSettings settings;
-    settings.width = 1024;
-    settings.height = 768;
+    settings.setSize(1024,768);
     settings.setGLVersion(4, 0);
     settings.windowMode = OF_WINDOW;
     shared_ptr<ofAppBaseWindow> mainWindow = ofCreateWindow(settings);
