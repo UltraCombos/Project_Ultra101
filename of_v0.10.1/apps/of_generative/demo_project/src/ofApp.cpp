@@ -4,11 +4,11 @@
 void ofApp::setup(){
 
 	// data type
-	char c = 'a'; // (character) ex: ‘A’, ‘e’, ‘$’
+	char c = 'a'; // (character) ex: ‘A? ‘e? ??
 	int i = 13579; // (integer) ex: 5, 68, 126, -687, 1235484
 	float f = 3.14159f; // (floating-point) ex: 3.14f, -6.387f, 15687.354984f
 	bool b = true; // (boolean) ex: true, false
-	string s = "This is a string"; // ex: “first line\n\tsecond line with tab\n”
+	string s = "This is a string"; // ex: “first line\n\tsecond line with tab\n?
 
 
 
@@ -240,7 +240,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 				// and push_back to minor_lines
 				ofPolyline line;
 				line.addVertex(x, y);
-				line.addVertex(history_point);
+				line.addVertex(history_point.x, history_point.y, 0);
 				minor_lines.push_back(line);
 			}
 		}
