@@ -26,6 +26,8 @@ void ofApp::update(){
     cv::Mat dst(dst_pnt.size(),2,CV_32FC1,&dst_pnt[0]);
     cv::Mat H = cv::findHomography(src,dst);
     //H.type()==CV_64F
+	if (H.empty())
+		return;
     homo_mat._mat[0] = ofVec4f(H.at<double>(0,0),H.at<double>(1,0),0,H.at<double>(2,0));
     homo_mat._mat[1] = ofVec4f(H.at<double>(0,1),H.at<double>(1,1),0,H.at<double>(2,1));
     homo_mat._mat[2] = {0,0,1,0};
@@ -69,6 +71,8 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
+	if (current_pnt == -1)
+		return;
     dst_pnt[current_pnt] = ofVec2f(x,y);
 }
 
