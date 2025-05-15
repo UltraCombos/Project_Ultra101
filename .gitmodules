@@ -2,3 +2,7 @@
 	path = of_v0.10.1/apps/myApps/ucEmptyExample
 	url = https://github.com/UltraCombos/ucEmptyExample.git
 	branch = master
+[submodule "of_v0.12.0/apps/myApps/ucEmptyExample"]
+	path = of_v0.12.0/apps/myApps/ucEmptyExample
+	url = https://github.com/UltraCombos/ucEmptyExample.git
+	branch = master
